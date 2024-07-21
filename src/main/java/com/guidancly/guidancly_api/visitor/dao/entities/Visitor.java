@@ -4,7 +4,6 @@ import com.guidancly.guidancly_api.tour.dao.entities.Tour;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

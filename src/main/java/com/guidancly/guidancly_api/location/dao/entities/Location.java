@@ -1,6 +1,5 @@
 package com.guidancly.guidancly_api.location.dao.entities;
 
-import com.guidancly.guidancly_api.guide.dao.entities.Guide;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
