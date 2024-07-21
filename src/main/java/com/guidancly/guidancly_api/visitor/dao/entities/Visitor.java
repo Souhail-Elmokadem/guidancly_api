@@ -2,12 +2,12 @@ package com.guidancly.guidancly_api.visitor.dao.entities;
 import com.guidancly.guidancly_api.user.dao.entities.User;
 import com.guidancly.guidancly_api.tour.dao.entities.Tour;
 
+import com.guidancly.guidancly_api.user.enums.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -19,5 +19,7 @@ public class Visitor extends User{
 
     @ManyToOne
     private Tour currentTour;
+
+
 
 }

@@ -2,6 +2,7 @@ package com.guidancly.guidancly_api.tour.dao.entities;
 
 
 import com.guidancly.guidancly_api.guide.dao.entities.Guide;
+import com.guidancly.guidancly_api.stop.dao.entities.Stop;
 import com.guidancly.guidancly_api.visitor.dao.entities.Visitor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,9 @@ public class Tour {
      int numberOfVisitors;
 
      String estimatedFullTime;
+
+     @ManyToMany(mappedBy = "tours")
+     List<Stop> stops;
 
 
      @ManyToOne
