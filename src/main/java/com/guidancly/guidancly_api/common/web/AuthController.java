@@ -97,11 +97,19 @@ public class AuthController {
             logger.info("Processing registration for user: {}", request.getEmail());
 
             Map<String, String> tokens = authManager.signUp(request);
+            tokens.put("status", String.valueOf(HttpStatus.OK.value()));
+            tokens.put("success", "true");
+            tokens.put("message", "SignUp successful.");
             return ResponseEntity.ok(tokens);
         } catch (RuntimeException e) {
             logger.warn("Registration error: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "User with the provided email or number already exists."));
+
+            Map<String, String> response = new HashMap<>();
+            response.put("status", String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+            response.put("success", "false");
+            response.put("message", "User with this number or email already exist !");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+
         } catch (Exception e) {
             logger.error("Unexpected error during registration: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -111,17 +119,19 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<Map<String, String>> signIn(@RequestBody SignIn request) {
         try {
-            logger.info("Attempting to authenticate user: {}", request.getEmail());
             Map<String, String> tokens = authManager.signIn(request);
+            tokens.put("status",HttpStatus.OK.toString().substring(0,3));
+            tokens.put("success", "true");
+            tokens.put("message", "Login successful.");
+
             return ResponseEntity.ok(tokens);
-        } catch (RuntimeException e) {
-            logger.error("Authentication error: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Invalid username or password."));
         } catch (Exception e) {
-            logger.error("Unexpected error during authentication: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("message", "An unexpected error occurred. Please try again later."));
+            Map<String, String> response = new HashMap<>();
+            response.put("status",HttpStatus.BAD_REQUEST.toString().substring(0,3));
+            response.put("success", "false");
+            response.put("message", "Invalid credentials or authentication failed.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
         }
     }
 

@@ -2,8 +2,10 @@ package com.guidancly.guidancly_api.common.services;
 
 import com.guidancly.guidancly_api.common.dao.entities.SignIn;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.guidancly.guidancly_api.common.dao.entities.SignUp;
 import com.guidancly.guidancly_api.guide.dao.entities.Guide;
@@ -26,6 +28,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService implements AuthManager{
@@ -80,28 +83,31 @@ public class AuthService implements AuthManager{
     }
 
 
-    @Override
-    public Map<String, String> signIn(SignIn request) {
+    public Map<String, String> signIn(SignIn loginRequest) throws AuthenticationException {
         Instant now = Instant.now();
-        UserDetails userDetails;
+        String subject = "";
+        String scope = "";
 
-        try {
-            if ("pass".equals(request.getLoginType())) {
-                Authentication authenticate = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-                userDetails = (UserDetails) authenticate.getPrincipal();
-            } else if ("refreshToken".equals(request.getLoginType())) {
-                var jwtDecoded = jwtDecoder.decode(request.getRefreshToken());
-                String subject = jwtDecoded.getSubject();
-                userDetails = userDetailsService.loadUserByUsername(subject);
-            } else {
-                throw new IllegalArgumentException("Invalid login type.");
-            }
+        if ("pass".equals(loginRequest.getLoginType())) {
 
-            return generateTokens(userDetails);
-        } catch (Exception e) {
-            throw new RuntimeException("Authentication error", e);
+            Authentication authenticate = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+            UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
+            subject = userDetails.getUsername();
+
+
+        } else if ("refreshToken".equals(loginRequest.getLoginType())) {
+            Jwt jwtDecoded = jwtDecoder.decode(loginRequest.getRefreshToken());
+            String email = jwtDecoded.getSubject();
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            subject = userDetails.getUsername();
         }
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(subject);
+
+        return generateTokens(userDetails);
     }
     @Override
     public User buildUserFromRequest(SignUp request) {
@@ -153,7 +159,7 @@ public class AuthService implements AuthManager{
                 .issuedAt(now)
                 .expiresAt(now.plus(Duration.ofMinutes(10)))
                 .subject(userDetails.getUsername())
-                .claim("scope", userDetails.getAuthorities())
+                .claim("scope", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" ")))
                 .build();
         String accessToken = jwtEncoder.encode(JwtEncoderParameters.from(
                 JwsHeader.with(MacAlgorithm.HS256).build(),

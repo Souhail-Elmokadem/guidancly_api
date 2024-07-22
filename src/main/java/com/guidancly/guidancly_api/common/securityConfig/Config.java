@@ -35,22 +35,19 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class Config {
 
-
-    private String secretKey="MIICXQIBAAKBgQCUZt6MM7A7sB13b3NBGEMLUJfhpYngU/hiUTWL+MDgjtdR/cLm\n" +
-            "wvOQPEDQYfaH7a9mP7qvbAGmaryGmDh19PC5ZqMY+cdBlg3v2UtKQXtsbCLxRswW\n" +
-            "6JqH62x6X+a+TzDaFZ2yia42Nq4fiC11s9qd37akN70lxCtpI8pvYWMusQIDAQAB\n" +
-            "AoGAQOJRP1+CGDbCS2wRKk7fUV0lauUjyU8tdF8pWE+klQofHpwi0R4/u7p8ZB/Q\n" +
-            "2FGVtND8YKKKfiaA0yBO31P+w4PTxRLIHwydEuIWQQYwD0HdI/vbX9zZ9bYoY+Zp\n" +
-            "ZNuMrCboiRvSwWPHMMZ1C3Z88GmQtWY91Hmc1ccjO6RcFyECQQDp2wjycaXWXZlI\n" +
-            "8MjARYkdBH7RMLkfOa4ZYtsuZuwdnySOY5LbgOARFtSieA26mxAPxnpxnhKxDgCu\n" +
-            "ae5RvANFAkEAonRSzDuqQFcEybNorn9Cp8KkDZVCBGYrrKNg6jqNTXvXRHb3IkTg\n" +
-            "TNxHAVEcm+sQdhFxfTCLGfbxYk1p7N2efQJBAJ527xwiSKb269zSVKZ9OAkyt6CX\n" +
-            "LIptMn0/UJij45G6+jGGZchaDvtlhhbF1T/CvWKDMwt0euQBQhLt8zDtfyUCQE3F\n" +
-            "PjYDgjeW8PXWa5DN340MQxk1kQsmFlZpSGYZbbfgR2fBRAIl0vM4qM1alUWXPKQp\n" +
-            "KZly+cSOUXRr9v+sAMkCQQC+Jl0xUK7liznmaojTvkNh9Z6InH3jbWIG5ErVTB3/\n" +
-            "bOPj0D6llu0N2iUSQUWo1qkLYxnhKyZn2+m4BWR0ypwq";
-
-
+    private String secretKey="MIICXgIBAAKBgQDNPVn9YUqJ/C9vDkwMP0xCVK218XCZeaPgvL3unAXSHcaWMUOP\n" +
+            "yb89nEfem3YHRwHJUpQkWIa7iFyMDZDxcg3TYl/Tx3vl6fm7Scj6emDwtb5iQIGF\n" +
+            "S7/LgSipW081HYcAzHvTpoA4wv+0wqD52VE2S0FVXL3K+FT7YzGFGv2jUwIDAQAB\n" +
+            "AoGBAKRFccyrXYTZ84FZGSdIVppUuoEBEZXV1YQgrYjZGpOVv4ghQClLWiVO+/tB\n" +
+            "xROIEvb3gJkivhxFxYVXqmaGWmcheKLNI+UXg10hJ+e08NMn1Gxgmj+IAXLEKG4A\n" +
+            "rPg0QQzwWU8KiwLL9vUr/lIqp5+L1O/xfWrSpFz4Us4nx6wxAkEA+Yxca9J4PKZl\n" +
+            "GgJvDqkmDXRgWu73RdBzFOU0IjWV3MhqGv7CSZhFhPspn05nSNwS5/RT16f7WzuF\n" +
+            "DYjXKXwauwJBANKLu7GzDSfp1aFSebDtxeGU9EzHkdLhpvW1YTLHtyGo/zbeMfMs\n" +
+            "KVdgmzCUgq3FJqaQi+kY0NaeXxEG/YeXzEkCQCGiQl6h6mS6RIwh4dgHAkLz+Xyo\n" +
+            "EpnNQ4WAcutdb4pnVK24wnTq2gvXUj/PcGpIhx/ONXKuiFk+h2tQkzdbK7sCQQCq\n" +
+            "PlKGXUFGBM24o/fCGIDo5oijjLtcyRk3lHIDnXl2vi+fLgs1lX/YJ0VVAsCnwcJ+\n" +
+            "7GI1GNvErkowenaGLTgBAkEApNjd2a4onsY4wunNREvmrOSKdIScOrq89ywx5qwG\n" +
+            "VXv3jbIKvsLYhWepWZmRvlgyFOFwMef04a77LPW3ZtHQEw==";
 
     private UserRepository userRepository;
 
@@ -66,12 +63,10 @@ public class Config {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(c->c.disable())
-                //.httpBasic(Customizer.withDefaults())
                 .cors(Customizer.withDefaults())
                 .oauth2ResourceServer(ao->ao.jwt(Customizer.withDefaults()))
                 .authorizeHttpRequests(ar->ar.requestMatchers("/auth/**").permitAll())
                 .authorizeHttpRequests(ar-> ar.requestMatchers("/content/**").permitAll())
-
                 .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
                 .build();
     }
@@ -83,6 +78,7 @@ public class Config {
             if (user == null) {
                 throw new UsernameNotFoundException("Utilisateur non trouvé avec l'email d'utilisateur : " + username);
             }
+
             return User.withUsername(user.getEmail())
                     .password(user.getPassword())
                     .authorities(user.getRole().toString())
@@ -99,6 +95,7 @@ public class Config {
         return NimbusJwtDecoder.withSecretKey(secretKeySpec).macAlgorithm(MacAlgorithm.HS256).build();
 
     }
+
     @Bean
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService){
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
