@@ -22,29 +22,16 @@ public class Tour {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
      String title;
-
      String description;
-
-
      String depart;
-
-
      Date date;
-
      @OneToMany(mappedBy = "currentTour")
      List<Visitor> visitors;
-
      int numberOfVisitors;
-
      String estimatedFullTime;
-
      @ManyToMany(mappedBy = "tours")
      List<Stop> stops;
-
-
      @ManyToOne
      Guide guide;
-
 }
