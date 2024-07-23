@@ -4,12 +4,19 @@ import com.guidancly.guidancly_api.guide.dao.entities.Guide;
 import com.guidancly.guidancly_api.stop.dao.entities.Stop;
 import com.guidancly.guidancly_api.visitor.dao.entities.Visitor;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TourDTO {
-    private Long id;
+    Long id;
     String title;
     String description;
     String depart;
