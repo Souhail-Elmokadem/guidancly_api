@@ -1,7 +1,7 @@
 package com.guidancly.guidancly_api.tour.services;
 
 import com.guidancly.guidancly_api.location.dao.entities.Location;
-import com.guidancly.guidancly_api.tour.dao.repository.TourRepository;
+import com.guidancly.guidancly_api.tour.dao.repositories.TourRepository;
 import com.guidancly.guidancly_api.tour.dto.TourDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
