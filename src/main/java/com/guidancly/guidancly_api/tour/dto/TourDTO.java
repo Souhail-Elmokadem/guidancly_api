@@ -21,9 +21,9 @@ public class TourDTO {
     String description;
     String depart;
     Date date;
-    List<Visitor> visitors;
+    List<String> visitorsEmail;
     int numberOfVisitors;
     String estimatedFullTime;
     List<Stop> stops;
-    Guide guide;
+    String guideEmail;
 }

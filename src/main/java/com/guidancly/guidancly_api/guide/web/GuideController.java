@@ -1,7 +1,7 @@
 package com.guidancly.guidancly_api.guide.web;
 
 
-import com.guidancly.guidancly_api.guide.service.GuideService;
+import com.guidancly.guidancly_api.guide.services.GuideService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

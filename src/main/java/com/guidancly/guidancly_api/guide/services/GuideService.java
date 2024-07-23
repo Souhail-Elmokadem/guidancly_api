@@ -1,4 +1,4 @@
-package com.guidancly.guidancly_api.guide.service;
+package com.guidancly.guidancly_api.guide.services;
 
 import com.guidancly.guidancly_api.guide.dto.GuideDto;
 
