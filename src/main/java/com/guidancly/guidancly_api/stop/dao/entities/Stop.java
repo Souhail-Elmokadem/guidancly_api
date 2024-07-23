@@ -17,18 +17,13 @@ import java.util.List;
 @Getter
 @Setter
 public class Stop {
-
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     String name;
-
     @OneToOne
     Location location;
-
     @ManyToMany
     List<Tour> tours;
     String description;
-
 
 }
