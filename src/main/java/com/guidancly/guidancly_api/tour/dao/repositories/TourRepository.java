@@ -1,10 +1,9 @@
-package com.guidancly.guidancly_api.tour.dao.repository;
+package com.guidancly.guidancly_api.tour.dao.repositories;
 
 import com.guidancly.guidancly_api.tour.dao.entities.Tour;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
-import java.util.OptionalInt;
 
 public interface TourRepository extends JpaRepository<Tour, Long> {
 
