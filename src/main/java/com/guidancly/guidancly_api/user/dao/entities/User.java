@@ -17,6 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
     @Id

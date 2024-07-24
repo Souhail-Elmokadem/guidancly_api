@@ -67,7 +67,8 @@ public class Config {
                 .oauth2ResourceServer(ao->ao.jwt(Customizer.withDefaults()))
                 .authorizeHttpRequests(ar->ar.requestMatchers("/auth/**").permitAll())
                 .authorizeHttpRequests(ar-> ar.requestMatchers("/content/**").permitAll())
-                .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
+//                .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
+                .authorizeHttpRequests(ar-> ar.anyRequest().permitAll())
                 .build();
     }
 

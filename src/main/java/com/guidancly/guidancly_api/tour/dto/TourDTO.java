@@ -3,6 +3,7 @@ package com.guidancly.guidancly_api.tour.dto;
 import com.guidancly.guidancly_api.guide.dao.entities.Guide;
 import com.guidancly.guidancly_api.stop.dao.entities.Stop;
 import com.guidancly.guidancly_api.visitor.dao.entities.Visitor;
+import com.guidancly.guidancly_api.visitor.dto.VisitorDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class TourDTO {
     String description;
     String depart;
     Date date;
-    List<String> visitorsEmail;
+    List<String> visitorsEmails;
     int numberOfVisitors;
     String estimatedFullTime;
     List<Stop> stops;

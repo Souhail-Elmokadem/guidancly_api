@@ -9,6 +9,6 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
 
     Optional<Tour> findAllByGuideId(Long GuideId);
 
-    Optional<Tour> findAllByStopId(Long StopId);
+    Optional<Tour> findAllByStopsId(Long StopId);
 
 }
