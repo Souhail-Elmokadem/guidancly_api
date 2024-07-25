@@ -2,6 +2,7 @@ package com.guidancly.guidancly_api.tour.web;
 
 
 import com.guidancly.guidancly_api.location.dao.entities.Location;
+import com.guidancly.guidancly_api.tour.dto.TourDTO;
 import com.guidancly.guidancly_api.tour.services.TourService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,19 @@ public class TourController {
     @GetMapping("/getToursByDepartLocation")
     ResponseEntity<?> getToursByDepartLocation(@RequestBody Location depart){
         return new ResponseEntity<>(tourService.getTourByDepartLocations(depart) , HttpStatus.OK);
+    }
+
+
+    @PostMapping("/create")
+    ResponseEntity<?> createTour(@RequestBody TourDTO tour){
+        return new ResponseEntity<>(tourService.createTour(tour), HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping("/delete/{id}")
+    ResponseEntity<?> deleteTour(@PathVariable Long tourId){
+        tourService.DeleteTour(tourId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

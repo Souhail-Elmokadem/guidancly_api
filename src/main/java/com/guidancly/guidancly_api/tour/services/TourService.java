@@ -19,7 +19,7 @@ public interface TourService {
 
     TourDTO createTour(TourDTO tour);
 
-    TourDTO updateTour(Long TourId, TourDTO tourDTO);
+    TourDTO updateTour(TourDTO tourDTO);
 
     void DeleteTour(Long TourId);
 

@@ -1,28 +1,23 @@
-package com.guidancly.guidancly_api.stop.dao.entities;
-
+package com.guidancly.guidancly_api.stop.Dto;
 
 import com.guidancly.guidancly_api.location.dao.entities.Location;
 import com.guidancly.guidancly_api.tour.dao.entities.Tour;
-import jakarta.persistence.*;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
-@Entity
-@NoArgsConstructor
+
+@Data
 @AllArgsConstructor
-@Getter
-@Setter
-public class Stop {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+@NoArgsConstructor
+public class StopDTO {
     private Long id;
     String name;
-    @OneToOne
     Location location;
-    @ManyToMany
-    List<Tour> tours;
+    List<Long> toursId;
     String description;
 }

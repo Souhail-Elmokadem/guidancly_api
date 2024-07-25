@@ -1,7 +1,7 @@
-package com.guidancly.guidancly_api.guide.web;
+package com.guidancly.guidancly_api.stop.web;
 
 
-import com.guidancly.guidancly_api.guide.services.GuideService;
+import com.guidancly.guidancly_api.stop.services.StopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,19 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/guides")
+@RequestMapping("/api/stops")
 @RequiredArgsConstructor
-public class GuideController {
+public class StopController {
 
-    private final GuideService guideService;
+    private final StopService stopService;
 
-
-
-    @GetMapping("/getAllGuides")
-    ResponseEntity<?> getAllGuides(){
-        return new ResponseEntity<>(guideService.getAllGuides() , HttpStatus.OK);
+    @GetMapping("/getAllStops")
+    ResponseEntity<?> getAllStops(){
+        return new ResponseEntity<>(stopService.getAllStops(), HttpStatus.OK);
     }
-
 
 
 
