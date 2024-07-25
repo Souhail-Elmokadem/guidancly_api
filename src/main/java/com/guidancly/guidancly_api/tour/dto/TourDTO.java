@@ -1,6 +1,7 @@
 package com.guidancly.guidancly_api.tour.dto;
 
 import com.guidancly.guidancly_api.guide.dao.entities.Guide;
+import com.guidancly.guidancly_api.stop.Dto.StopDTO;
 import com.guidancly.guidancly_api.stop.dao.entities.Stop;
 import com.guidancly.guidancly_api.visitor.dao.entities.Visitor;
 import com.guidancly.guidancly_api.visitor.dto.VisitorDTO;
@@ -25,6 +26,6 @@ public class TourDTO {
     List<String> visitorsEmails;
     int numberOfVisitors;
     String estimatedFullTime;
-    List<Stop> stops;
+    List<StopDTO> stops;
     String guideEmail;
 }

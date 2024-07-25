@@ -25,5 +25,4 @@ public class Stop {
     @ManyToMany
     List<Tour> tours;
     String description;
-
 }

@@ -14,6 +14,8 @@ public class Location {
     private String name;
     private String description;
 
+    private String latitude;
+    private String longitude;
 
     //longitude  soon
     // latitude soon
