@@ -123,14 +123,14 @@ public class GuidanclyApiApplication {
                 stop.setName("Stop " + i);
                 stop.setDescription("Description for Stop " + i);
 
-//                Location location = new Location();
-//                location.setName("L9lawi");
-//                location.setDescription("L9laaaaaaaaawiii?");
-//                location.setLatitude("latitude" + i);
-//                location.setLongitude("longitude" + i);
-//                locationRepository.save(location);
+                Location location = new Location();
+                location.setName("L9lawi");
+                location.setDescription("L9laaaaaaaaawiii?");
+                location.setLatitude("latitude" + i);
+                location.setLongitude("longitude" + i);
+                locationRepository.save(location);
 
-                stop.setLocation(null);
+                stop.setLocation(location);
                 stop.setTours(List.of(savedTour));
                 stops.add(stopRepository.save(stop));
             }
