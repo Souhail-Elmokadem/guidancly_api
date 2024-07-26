@@ -83,6 +83,7 @@ public class AuthService implements AuthManager{
     }
 
 
+    @Override
     public Map<String, String> signIn(SignIn loginRequest) throws AuthenticationException {
         Instant now = Instant.now();
         String subject = "";
@@ -92,6 +93,33 @@ public class AuthService implements AuthManager{
 
             Authentication authenticate = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+            UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
+            subject = userDetails.getUsername();
+
+
+        } else if ("refreshToken".equals(loginRequest.getLoginType())) {
+            Jwt jwtDecoded = jwtDecoder.decode(loginRequest.getRefreshToken());
+            String email = jwtDecoded.getSubject();
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            subject = userDetails.getUsername();
+        }
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(subject);
+
+        return generateTokens(userDetails);
+    }
+    @Override
+    public Map<String, String> signInWithNumber(SignIn loginRequest) throws AuthenticationException {
+
+        String subject = "";
+        String scope = "";
+
+        if ("pass".equals(loginRequest.getLoginType())) {
+
+            Authentication authenticate = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getNumber(), loginRequest.getPassword()));
 
             UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
             subject = userDetails.getUsername();

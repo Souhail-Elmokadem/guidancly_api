@@ -9,6 +9,7 @@ import com.guidancly.guidancly_api.user.enums.Role;
 import com.guidancly.guidancly_api.visitor.dao.repositories.VisitorRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +27,8 @@ public interface AuthManager {
 
 
     Map<String, String> signIn(SignIn request);
+
+    Map<String, String> signInWithNumber(SignIn loginRequest) throws AuthenticationException;
 
     User buildUserFromRequest(SignUp request);
 

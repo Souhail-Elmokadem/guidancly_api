@@ -134,6 +134,24 @@ public class AuthController {
 
         }
     }
+    @PostMapping("/signInWithNumber")
+    public ResponseEntity<Map<String, String>> signInWithNumber(@RequestBody SignIn request) {
+        try {
+            Map<String, String> tokens = authManager.signInWithNumber(request);
+            tokens.put("status",HttpStatus.OK.toString().substring(0,3));
+            tokens.put("success", "true");
+            tokens.put("message", "Login successful.");
+
+            return ResponseEntity.ok(tokens);
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("status",HttpStatus.BAD_REQUEST.toString().substring(0,3));
+            response.put("success", "false");
+            response.put("message", "Invalid credentials or authentication failed.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+        }
+    }
 
 
 

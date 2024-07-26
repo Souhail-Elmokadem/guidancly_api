@@ -12,6 +12,7 @@ import lombok.*;
 @ToString
 public class SignIn {
     String email;
+    String number;
     String password;
     String loginType;
     String refreshToken;
