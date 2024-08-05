@@ -22,4 +22,5 @@ public class GuideServiceImpl implements GuideService {
     public List<GuideDto> getAllGuides() {
         return guideRepository.findAll().stream().map(guide -> guideMapper.convertToDto(guide)).collect(Collectors.toList());
     }
+
 }

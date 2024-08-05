@@ -4,18 +4,12 @@ package com.guidancly.guidancly_api.common.web;
 import com.guidancly.guidancly_api.common.dao.entities.SignIn;
 import com.guidancly.guidancly_api.common.dao.entities.SignUp;
 import com.guidancly.guidancly_api.common.services.AuthManager;
-import com.guidancly.guidancly_api.guide.dao.entities.Guide;
 import com.guidancly.guidancly_api.guide.dao.repositories.GuideRepository;
-import com.guidancly.guidancly_api.guide.enums.GuideType;
 import com.guidancly.guidancly_api.user.dao.entities.User;
 import com.guidancly.guidancly_api.user.dao.repositories.UserRepository;
-import com.guidancly.guidancly_api.user.enums.Role;
-import com.guidancly.guidancly_api.visitor.dao.entities.Visitor;
+import com.guidancly.guidancly_api.user.dto.UserDto;
+import com.guidancly.guidancly_api.user.services.UserManager;
 import com.guidancly.guidancly_api.visitor.dao.repositories.VisitorRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,16 +17,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 @RestController
@@ -58,10 +48,11 @@ public class AuthController {
 
 
     private AuthenticationManager authenticationManager;
+    private UserManager userManager;
 
     JwtClaimsSet jwtClaimsSet,jwtClaimsSetRefresh;
 
-    public AuthController(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder, UserDetailsService userDetailsService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, GuideRepository guideRepository, VisitorRepository visitorRepository, AuthManager authManager) {
+    public AuthController(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder, UserDetailsService userDetailsService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, GuideRepository guideRepository, VisitorRepository visitorRepository, AuthManager authManager,UserManager userManager) {
         this.jwtEncoder = jwtEncoder;
         this.jwtDecoder = jwtDecoder;
         this.userDetailsService = userDetailsService;
@@ -71,6 +62,7 @@ public class AuthController {
         this.guideRepository = guideRepository;
         this.visitorRepository = visitorRepository;
         this.authManager = authManager;
+        this.userManager=userManager;
     }
 
     private PasswordEncoder passwordEncoder;
@@ -152,8 +144,36 @@ public class AuthController {
 
         }
     }
+    @GetMapping("/userinfo")
+    public ResponseEntity<Map<String, Object>> userinfo(@RequestHeader("Authorization") String token) {
+        try {
+            String jwtToken = token.replace("Bearer ", "");
+            Jwt decodedToken = jwtDecoder.decode(jwtToken);
+            Map<String, Object> claims = decodedToken.getClaims();
+            UserDto userDto = userManager.getUserByEmail(claims.get("sub").toString());
 
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", HttpStatus.OK.toString().substring(0, 3));
+            response.put("success", "true");
+            for (Map.Entry<String, Object> entry : claims.entrySet()) {
+                response.put(entry.getKey(), entry.getValue().toString());
+            }
+            response.put("data",userDto);
 
+            return ResponseEntity.ok(response);
+        } catch (JwtException e) {
+            logger.error("Invalid token: {}", e.getMessage());
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", HttpStatus.UNAUTHORIZED.toString().substring(0, 3));
+            response.put("success", "false");
+            response.put("message", "Invalid or expired token.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        } catch (Exception e) {
+            logger.error("Unexpected error while retrieving user info: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "An unexpected error occurred. Please try again later."));
+        }
+    }
 
 
 

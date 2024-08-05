@@ -18,6 +18,5 @@ public class StopDTO {
     private Long id;
     String name;
     Location location;
-    List<Long> toursId;
-    String description;
+    //String description;
 }

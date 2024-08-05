@@ -2,6 +2,7 @@ package com.guidancly.guidancly_api.tour.dao.entities;
 
 
 import com.guidancly.guidancly_api.guide.dao.entities.Guide;
+import com.guidancly.guidancly_api.location.dao.entities.Location;
 import com.guidancly.guidancly_api.stop.dao.entities.Stop;
 import com.guidancly.guidancly_api.visitor.dao.entities.Visitor;
 import jakarta.persistence.*;
@@ -21,17 +22,38 @@ import java.util.List;
 public class Tour {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-     String title;
+     private Long id;
+     String title; // tourName
      String description;
-     String depart;
+     //Location depart;
      Date date;
      @OneToMany(mappedBy = "currentTour")
      List<Visitor> visitors;
+
      int numberOfVisitors;
+
+ @Override
+ public String toString() {
+  return "Tour{" +
+          "id=" + id +
+          ", title='" + title + '\'' +
+          ", description='" + description + '\'' +
+          ", depart=" + depart +
+          ", stops=" + stops +
+          ", guide=" + guide +
+          '}';
+ }
+
+
+
+    @ManyToOne
+     private Stop depart; // started
+
      String estimatedFullTime;
+
      @ManyToMany(mappedBy = "tours")
-     List<Stop> stops;
+     List<Stop> stops; // waypoints
+
      @ManyToOne
      Guide guide;
 }

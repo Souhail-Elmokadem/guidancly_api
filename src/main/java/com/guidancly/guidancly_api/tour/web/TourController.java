@@ -3,6 +3,7 @@ package com.guidancly.guidancly_api.tour.web;
 
 import com.guidancly.guidancly_api.location.dao.entities.Location;
 import com.guidancly.guidancly_api.tour.dto.TourDTO;
+import com.guidancly.guidancly_api.tour.dto.TourDtoReceive;
 import com.guidancly.guidancly_api.tour.services.TourService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,8 @@ public class TourController {
 
 
     @PostMapping("/create")
-    ResponseEntity<?> createTour(@RequestBody TourDTO tour){
+    ResponseEntity<?> createTour(@RequestBody TourDtoReceive tour){
+        System.out.println(tour.toString());
         return new ResponseEntity<>(tourService.createTour(tour), HttpStatus.CREATED);
     }
 

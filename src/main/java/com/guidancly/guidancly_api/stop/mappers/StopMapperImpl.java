@@ -27,13 +27,13 @@ public class StopMapperImpl implements StopMapper{
         this.modelMapper = modelMapper;
 
         // Configure custom mapping
-        TypeMap<Stop, StopDTO> typeMap = modelMapper.createTypeMap(Stop.class, StopDTO.class);
-        typeMap.addMappings(mapper -> mapper.using(ctx -> {
-            List<Tour> tours = (List<Tour>) ctx.getSource();
-            return tours.stream()
-                    .map(Tour::getId)
-                    .collect(Collectors.toList());
-        }).map(Stop::getTours, StopDTO::setToursId));
+//        TypeMap<Stop, StopDTO> typeMap = modelMapper.createTypeMap(Stop.class, StopDTO.class);
+//        typeMap.addMappings(mapper -> mapper.using(ctx -> {
+//            List<Tour> tours = (List<Tour>) ctx.getSource();
+//            return tours.stream()
+//                    .map(Tour::getId)
+//                    .collect(Collectors.toList());
+//        }).map(Stop::getTours, StopDTO::setToursId));
     }
 
 
