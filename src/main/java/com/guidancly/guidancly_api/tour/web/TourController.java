@@ -44,9 +44,9 @@ public class TourController {
 
 
     @PostMapping("/create")
-    ResponseEntity<?> createTour(@RequestBody TourDtoReceive tour){
+    ResponseEntity<?> createTour(@RequestBody TourDtoReceive tour,@RequestHeader("Authorization") String token){
         System.out.println(tour.toString());
-        return new ResponseEntity<>(tourService.createTour(tour), HttpStatus.CREATED);
+        return new ResponseEntity<>(tourService.createTour(tour,token), HttpStatus.CREATED);
     }
 
 

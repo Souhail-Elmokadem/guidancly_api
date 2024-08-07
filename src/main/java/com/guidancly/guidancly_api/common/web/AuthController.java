@@ -129,6 +129,7 @@ public class AuthController {
     @PostMapping("/signInWithNumber")
     public ResponseEntity<Map<String, String>> signInWithNumber(@RequestBody SignIn request) {
         try {
+
             Map<String, String> tokens = authManager.signInWithNumber(request);
             tokens.put("status",HttpStatus.OK.toString().substring(0,3));
             tokens.put("success", "true");

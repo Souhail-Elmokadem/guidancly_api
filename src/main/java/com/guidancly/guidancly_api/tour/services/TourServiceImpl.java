@@ -1,5 +1,8 @@
 package com.guidancly.guidancly_api.tour.services;
 
+import com.guidancly.guidancly_api.common.services.BaseImpl;
+import com.guidancly.guidancly_api.guide.dao.entities.Guide;
+import com.guidancly.guidancly_api.guide.dao.repositories.GuideRepository;
 import com.guidancly.guidancly_api.location.dao.entities.Location;
 import com.guidancly.guidancly_api.location.dao.repositories.LocationRepository;
 import com.guidancly.guidancly_api.stop.dao.entities.Stop;
@@ -11,6 +14,9 @@ import com.guidancly.guidancly_api.tour.dto.TourDTO;
 import com.guidancly.guidancly_api.tour.dto.TourDtoReceive;
 import com.guidancly.guidancly_api.tour.mappers.TourMapper;
 import com.guidancly.guidancly_api.stop.Dto.StopDTO;
+import com.guidancly.guidancly_api.user.dao.entities.User;
+import com.guidancly.guidancly_api.user.dao.repositories.UserRepository;
+import com.guidancly.guidancly_api.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +35,17 @@ public class TourServiceImpl implements TourService{
     private final TourRepository tourRepository;
     private final TourMapper tourMapper;
     private final StopMapper stopMapper;
+    @Autowired
+    private BaseImpl baseImpl;
 
     @Autowired
     private StopRepository stopRepository;
+
+    @Autowired
+    private GuideRepository guideRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     private LocationRepository locationRepository;
@@ -65,8 +79,10 @@ public class TourServiceImpl implements TourService{
     }
 
     @Override
-    public TourDTO createTour(TourDtoReceive tour) {
 
+    public TourDTO createTour(TourDtoReceive tour,String token) {
+        UserDto userDto = baseImpl.getUserByToken(token);
+        Guide guide = guideRepository.findByEmail(userDto.getEmail());
         List<Stop> stopslist =  new ArrayList<>();
         System.out.println(stopRepository.save(new Stop(null,"",null,null,"")));
         tour.getStops().stream().map(s->{
@@ -92,17 +108,11 @@ public class TourServiceImpl implements TourService{
 
        stopRepository.saveAll(stopslist);
        tour2.setDepart(s);
+       tour2.setGuide(guide);
 
-       System.out.println(tour2);
-       Tour savedTour = tourRepository.save(tour2);
-
-
-
-      System.out.println("------------------------");
-
-
-       // stopRepository.saveAll(stops);
-
+        System.out.println(tour2);
+        Tour savedTour = tourRepository.save(tour2);
+        System.out.println(savedTour);
         return tourMapper.convertToDTO(savedTour);
     }
 

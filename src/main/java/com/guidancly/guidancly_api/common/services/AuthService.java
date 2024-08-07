@@ -185,7 +185,7 @@ public class AuthService implements AuthManager{
 
         JwtClaimsSet accessClaims = JwtClaimsSet.builder()
                 .issuedAt(now)
-                .expiresAt(now.plus(Duration.ofSeconds(10)))
+                .expiresAt(now.plus(Duration.ofMinutes(10)))
                 .subject(userDetails.getUsername())
                 .claim("scope", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" ")))
                 .build();

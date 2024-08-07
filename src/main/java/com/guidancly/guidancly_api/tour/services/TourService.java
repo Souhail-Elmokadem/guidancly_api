@@ -18,7 +18,7 @@ public interface TourService {
 
     TourDTO getTourByDepartLocations(Location Depart);
 
-    TourDTO createTour(TourDtoReceive tour);
+    TourDTO createTour(TourDtoReceive tour,String token);
 
     TourDTO updateTour(TourDTO tourDTO);
 
