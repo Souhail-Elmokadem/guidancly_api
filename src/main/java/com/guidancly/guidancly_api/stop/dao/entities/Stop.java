@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "stops")
 public class Stop {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

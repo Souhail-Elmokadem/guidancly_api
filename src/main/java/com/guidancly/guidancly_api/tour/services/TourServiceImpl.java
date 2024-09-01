@@ -10,18 +10,20 @@ import com.guidancly.guidancly_api.stop.dao.repositories.StopRepository;
 import com.guidancly.guidancly_api.stop.mappers.StopMapper;
 import com.guidancly.guidancly_api.tour.dao.entities.Tour;
 import com.guidancly.guidancly_api.tour.dao.repositories.TourRepository;
+import com.guidancly.guidancly_api.tour.dto.TourBookingDTO;
 import com.guidancly.guidancly_api.tour.dto.TourDTO;
 import com.guidancly.guidancly_api.tour.dto.TourDtoReceive;
 import com.guidancly.guidancly_api.tour.mappers.TourMapper;
-import com.guidancly.guidancly_api.stop.Dto.StopDTO;
-import com.guidancly.guidancly_api.user.dao.entities.User;
 import com.guidancly.guidancly_api.user.dao.repositories.UserRepository;
 import com.guidancly.guidancly_api.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class TourServiceImpl implements TourService{
+public class TourServiceImpl  implements TourService {
 
     private final TourRepository tourRepository;
     private final TourMapper tourMapper;
@@ -50,11 +52,18 @@ public class TourServiceImpl implements TourService{
     @Autowired
     private LocationRepository locationRepository;
 
+
     @Override
     public Collection<TourDTO> getAllTours() {
         return tourRepository.findAll()
                 .stream().map(tour -> tourMapper.convertToDTO(tour))
                 .collect(Collectors.toList());
+    }
+    @Override
+    public Page<TourDTO> getAllToursPage(String kw, int page, int size) {
+        Page<TourDTO> tourDTOS = tourRepository.findByTitleContaining(kw,PageRequest.of(page,size))
+                .map(tourMapper::convertToDTO);
+        return tourDTOS;
     }
 
     @Override
@@ -75,14 +84,35 @@ public class TourServiceImpl implements TourService{
 
     @Override
     public TourDTO getTourByDepartLocations(Location Depart) {
+
         return null;
     }
+    @Override
+    public List<TourBookingDTO> getTourByCurrentLocations(Double lat, Double lng) {
+
+        System.out.println(lat+" +"+lng);
+        List<Tour> tours = tourRepository.findToursNearby(lat,lng,1000);
+
+        ///tours.stream().forEach((t)->System.out.println(t.getTitle()));
+
+
+        List<TourBookingDTO> tourDTO= tours.stream().map(tourMapper::covertToBookingDTO).collect(Collectors.toList());
+
+        System.out.println("+++++++++++++++++++++++++++");
+        System.out.println(tourDTO);
+
+        return tourDTO;
+    }
+
 
     @Override
 
-    public TourDTO createTour(TourDtoReceive tour,String token) {
+    public TourDTO createTour(TourDtoReceive tour,String token) throws IOException{
         UserDto userDto = baseImpl.getUserByToken(token);
         Guide guide = guideRepository.findByEmail(userDto.getEmail());
+        if (guide==null){
+            throw new RuntimeException("User not a have guide Role");
+        }
         List<Stop> stopslist =  new ArrayList<>();
         System.out.println(stopRepository.save(new Stop(null,"",null,null,"")));
         tour.getStops().stream().map(s->{
@@ -91,14 +121,26 @@ public class TourServiceImpl implements TourService{
             return s;
         }).collect(Collectors.toList());
 
+
        TourDTO tourDTO = new TourDTO();
        tourDTO.setTitle(tour.getTitle());
        tourDTO.setStops(tour.getStops());
        tourDTO.setDepart(tour.getDepart());
+       tourDTO.setDescription(tour.getDescription());
 
 
        Tour tour2 = new Tour();
        BeanUtils.copyProperties(tourDTO,tour2);
+       tour2.setPrice(tour.getPrice());
+
+       List<String> tourImages =  tour.getImages().stream().map(t->{
+           try {
+               return baseImpl.uploadBase64Image(t);
+           } catch (IOException e) {
+               throw new RuntimeException(e);
+           }
+       }).collect(Collectors.toList());
+       tour2.setImages(tourImages);
        tour2.setStops(stopslist);
 
        locationRepository.save(tour.getDepart().getLocation());

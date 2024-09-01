@@ -4,6 +4,7 @@ import com.guidancly.guidancly_api.stop.Dto.StopDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ public class TourDtoReceive {
     String description;
     StopDTO depart;
     List<StopDTO> stops;
+    private double price;
+    private List<String> images;
 
 }

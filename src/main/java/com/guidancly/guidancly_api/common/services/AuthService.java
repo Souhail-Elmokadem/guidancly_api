@@ -30,7 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 @Service
+@Host
 public class AuthService implements AuthManager{
 
     private JwtEncoder jwtEncoder;
@@ -145,7 +147,7 @@ public class AuthService implements AuthManager{
                 .email(request.getEmail())
                 .number(request.getNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .avatar("http://localhost:9090/content/logo.png")
+                .avatar(Host.hostname+"/content/logo.png")
                 .role(request.getRole())
                 .createdAt(new Date())
                 .updatedAt(new Date())

@@ -39,21 +39,21 @@ public class GuidanclyApiApplication {
                             LocationRepository locationRepository,
                             StopRepository stopRepository){
         return args -> {
-            Location location = new Location();
-            location.setLatitude("156");
-            location.setLongitude("5353");
-            Location savedLocation = locationRepository.save(location);
-
-            Stop stop = new Stop();
-            stop.setName("huhi");
-            stop.setLocation(savedLocation);
-            Stop savedStop = stopRepository.save(stop);
+//            Location location = new Location();
+//            location.setLatitude(156.0);
+//            location.setLongitude(5353.0);
+//            Location savedLocation = locationRepository.save(location);
 //
-            Tour tour = new Tour();
-            tour.setStops(List.of(savedStop));
-            tour.setDepart(savedStop);
-            tour.setTitle("HIJIJIHIH");
-            Tour savedTour = tourRepository.save(tour);
+//            Stop stop = new Stop();
+//            stop.setName("huhi");
+//            stop.setLocation(savedLocation);
+//            Stop savedStop = stopRepository.save(stop);
+////
+//            Tour tour = new Tour();
+//            tour.setStops(List.of(savedStop));
+//            tour.setDepart(savedStop);
+//            tour.setTitle("HIJIJIHIH");
+//            Tour savedTour = tourRepository.save(tour);
 //            User user = User.builder()
 //                    .email("test")
 //                    .avatar("jj")

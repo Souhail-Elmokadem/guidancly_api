@@ -5,12 +5,12 @@ import lombok.Data;
 
 @Entity
 @Data
-
+@Table(name = "locations")
 public class Location {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String latitude;
-    private String longitude;
+    private Double latitude;
+    private Double longitude;
 
     //longitude  soon
     // latitude soon

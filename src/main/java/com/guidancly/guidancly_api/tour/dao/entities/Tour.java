@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "tours")
 public class Tour {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,6 +32,9 @@ public class Tour {
      List<Visitor> visitors;
 
      int numberOfVisitors;
+     double price;
+     @ElementCollection
+     List<String> images;
 
  @Override
  public String toString() {
@@ -43,15 +47,12 @@ public class Tour {
           ", guide=" + guide +
           '}';
  }
-
-
-
     @ManyToOne
      private Stop depart; // started
 
      String estimatedFullTime;
 
-     @ManyToMany(mappedBy = "tours")
+     @ManyToMany
      List<Stop> stops; // waypoints
 
      @ManyToOne
