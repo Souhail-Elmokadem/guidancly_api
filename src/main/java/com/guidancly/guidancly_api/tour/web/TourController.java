@@ -62,7 +62,7 @@ public class TourController {
 
     @PostMapping("/create")
     ResponseEntity<?> createTour(@RequestBody TourDtoReceive tour,@RequestHeader("Authorization") String token) throws IOException {
-        System.out.println(tour.toString());
+
         return new ResponseEntity<>(tourService.createTour(tour,token), HttpStatus.CREATED);
     }
 

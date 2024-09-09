@@ -4,12 +4,20 @@ package com.guidancly.guidancly_api.common.web;
 import com.guidancly.guidancly_api.common.dao.entities.SignIn;
 import com.guidancly.guidancly_api.common.dao.entities.SignUp;
 import com.guidancly.guidancly_api.common.services.AuthManager;
+import com.guidancly.guidancly_api.guide.dao.entities.Guide;
 import com.guidancly.guidancly_api.guide.dao.repositories.GuideRepository;
+import com.guidancly.guidancly_api.guide.dto.GuideDto;
+import com.guidancly.guidancly_api.guide.mappers.GuideMapper;
 import com.guidancly.guidancly_api.user.dao.entities.User;
 import com.guidancly.guidancly_api.user.dao.repositories.UserRepository;
 import com.guidancly.guidancly_api.user.dto.UserDto;
+import com.guidancly.guidancly_api.user.enums.Role;
 import com.guidancly.guidancly_api.user.services.UserManager;
+import com.guidancly.guidancly_api.visitor.dao.entities.Visitor;
 import com.guidancly.guidancly_api.visitor.dao.repositories.VisitorRepository;
+import com.guidancly.guidancly_api.visitor.dto.VisitorDTO;
+import com.guidancly.guidancly_api.visitor.mappers.VisitorMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -70,6 +78,12 @@ public class AuthController {
     private UserRepository userRepository;
     private GuideRepository guideRepository;
     private VisitorRepository visitorRepository;
+
+    @Autowired
+    VisitorMapper visitorMapper;
+
+    @Autowired
+    GuideMapper guideMapper;
 
 
 
@@ -152,14 +166,20 @@ public class AuthController {
             Jwt decodedToken = jwtDecoder.decode(jwtToken);
             Map<String, Object> claims = decodedToken.getClaims();
             UserDto userDto = userManager.getUserByEmail(claims.get("sub").toString());
-
             Map<String, Object> response = new HashMap<>();
+            if (userDto.getRole().equals(Role.VISITOR)){
+                VisitorDTO visitor = visitorMapper.ConvertToDTO(visitorRepository.findByEmailOrNumber(userDto.getEmail(), userDto.getNumber()));
+                response.put("data",visitor);
+            }else if (userDto.getRole().equals(Role.GUIDE)){
+                GuideDto guide = guideMapper.convertToDto(guideRepository.findByEmail(userDto.getEmail()));
+                response.put("data",guide);
+            }
             response.put("status", HttpStatus.OK.toString().substring(0, 3));
             response.put("success", "true");
             for (Map.Entry<String, Object> entry : claims.entrySet()) {
                 response.put(entry.getKey(), entry.getValue().toString());
             }
-            response.put("data",userDto);
+            //response.put("data",userDto);
 
             return ResponseEntity.ok(response);
         } catch (JwtException e) {

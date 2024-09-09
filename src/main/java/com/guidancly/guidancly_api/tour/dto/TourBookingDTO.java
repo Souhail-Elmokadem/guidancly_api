@@ -13,9 +13,12 @@ import com.guidancly.guidancly_api.stop.Dto.StopDTO;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TourBookingDTO {
+    Long id;
     String title;
     String description;
     StopDTO depart;
+    int estimatedTime;
+    int distance;
     List<StopDTO> stops;
     GuideDto guide;
     double price;

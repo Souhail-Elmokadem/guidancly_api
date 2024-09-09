@@ -39,6 +39,7 @@ public class GuidanclyApiApplication {
                             LocationRepository locationRepository,
                             StopRepository stopRepository){
         return args -> {
+
 //            Location location = new Location();
 //            location.setLatitude(156.0);
 //            location.setLongitude(5353.0);

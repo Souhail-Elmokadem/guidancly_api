@@ -4,12 +4,14 @@ import com.guidancly.guidancly_api.user.dao.entities.User;
 import com.guidancly.guidancly_api.tour.dao.entities.Tour;
 
 import com.guidancly.guidancly_api.user.enums.Role;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -22,6 +24,10 @@ public class Visitor extends User{
 
     @ManyToOne
     private Tour currentTour;
+
+
+    @OneToMany
+    private List<Tour> tourListVisited;
 
 
 

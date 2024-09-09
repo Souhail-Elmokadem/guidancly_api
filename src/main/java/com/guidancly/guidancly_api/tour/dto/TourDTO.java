@@ -1,6 +1,7 @@
 package com.guidancly.guidancly_api.tour.dto;
 
 import com.guidancly.guidancly_api.guide.dao.entities.Guide;
+import com.guidancly.guidancly_api.guide.dto.GuideDto;
 import com.guidancly.guidancly_api.location.dao.entities.Location;
 import com.guidancly.guidancly_api.stop.Dto.StopDTO;
 import com.guidancly.guidancly_api.stop.dao.entities.Stop;
@@ -19,10 +20,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TourDTO {
+    Long id;
     String title;
     String description;
     StopDTO depart;
     List<StopDTO> stops;
+    int estimatedTime;
+    Date date;
+    int distance;
+    GuideDto guide;
+    int numberOfVisitors;
     double price;
     List<String> images;
 

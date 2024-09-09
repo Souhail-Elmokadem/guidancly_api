@@ -12,9 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TourDtoReceive {
+    Long id;
     String title;
     String description;
     StopDTO depart;
+    int estimatedTime;
+    int distance;
     List<StopDTO> stops;
     private double price;
     private List<String> images;

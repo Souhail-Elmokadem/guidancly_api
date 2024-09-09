@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -142,6 +143,9 @@ public class TourServiceImpl  implements TourService {
        }).collect(Collectors.toList());
        tour2.setImages(tourImages);
        tour2.setStops(stopslist);
+       tour2.setDate(new Date());
+       tour2.setEstimatedTime(tour.getEstimatedTime());
+       tour2.setDistance(tour.getDistance());
 
        locationRepository.save(tour.getDepart().getLocation());
 

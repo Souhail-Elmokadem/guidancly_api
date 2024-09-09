@@ -30,7 +30,6 @@ public class Tour {
      Date date;
      @OneToMany(mappedBy = "currentTour")
      List<Visitor> visitors;
-
      int numberOfVisitors;
      double price;
      @ElementCollection
@@ -50,7 +49,8 @@ public class Tour {
     @ManyToOne
      private Stop depart; // started
 
-     String estimatedFullTime;
+     int estimatedTime;
+     int distance;
 
      @ManyToMany
      List<Stop> stops; // waypoints
